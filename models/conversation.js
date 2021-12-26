@@ -10,13 +10,12 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Conversation.hasMany(models.Message);
-      Conversation.belongsToMany(models.User);
+      Conversation.belongsToMany(models.User, { through: "UserConversations" });
     }
   }
   Conversation.init(
     {
-      User1Id: DataTypes.INTEGER,
-      User2Id: DataTypes.INTEGER,
+      UserId: DataTypes.INTEGER,
     },
     {
       sequelize,
