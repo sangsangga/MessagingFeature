@@ -15,5 +15,13 @@
   "bugs": {
     "url": "https://github.com/sangsangga/MessagingFeature/issues"
   },
-  "homepage": "https://github.com/sangsangga/MessagingFeature#readme"
+  "homepage": "https://github.com/sangsangga/MessagingFeature#readme",
+  "dependencies": {
+    "express": "^4.17.2",
+    "pg": "^8.7.1",
+    "sequelize": "^7.0.0-alpha.2"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.3.0"
+  }
 }
