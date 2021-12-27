@@ -63,7 +63,6 @@ class ConversationController {
   static async FetchConversationDetail(req, res, next) {
     try {
       const conversationId = +req.params.conversationId;
-
       const conversation = await Conversation.findByPk(conversationId, {
         include: [
           {
@@ -71,8 +70,18 @@ class ConversationController {
           },
         ],
       });
-
-      res.status(200).json(conversation);
+      const messages = await Message.findAll({
+        where: {
+          ConversationId: conversationId,
+        },
+        order: [["createdAt", "DESC"]],
+      });
+      res.status(200).json({
+        data: {
+          conversation: conversation,
+          messages: messages,
+        },
+      });
     } catch (error) {
       next(error);
     }
