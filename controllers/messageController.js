@@ -6,45 +6,40 @@ const {
 } = require("../models/index");
 
 class MessageController {
-  static async CreateConversation(req, res, next) {
+  static async CreateMessage(req, res, next) {
     try {
+      console.log(req.headers, "<< headers");
       const payload = {
-        userId: req.body.userId,
+        ConversationId: req.body.conversationId,
         message: req.body.message,
-        userTarget: req.body.userTarget,
+        UserId: req.headers.userid,
       };
-      const conversation = await Conversation.create(
-        { userId: payload.userId },
-        { returning: true }
-      );
 
-      const convSender = await UserConversation.Create({
-        userId: payload.userId,
-        conversationId: conversation.id,
-      });
+      const message = await Message.create(payload, { returning: true });
 
-      const convReceiver = await UserConversation.Create({
-        userId: payload.userTarget,
-        conversationId: conversation.id,
-      });
-
-      res.status(201).json({ message: "Conversation Created Successfully" });
+      res.status(201).json({ message: "Message Created Successfully" });
     } catch (error) {
       next(error);
     }
   }
 
-  static async CreateMessage(req, res, next) {
+  static async FetchMessageByConversation(req, res, next) {
     try {
+      console.log(req.params, "<< params");
       const payload = {
-        conversationId: req.body.conversationId,
-        message: req.body.message,
-        userId: req.body.userId,
+        conversationId: +req.params.conversationId,
       };
 
-      const message = await message.Create(payload, { returning: true });
+      console.log(payload, "<<< payload");
 
-      res.status(201).json({ message: "Message Created Successfully" });
+      const messages = await Message.findAll({
+        where: {
+          ConversationId: payload.conversationId,
+        },
+        order: ["createdAt"],
+      });
+
+      res.status(200).json({ data: messages });
     } catch (error) {
       next(error);
     }
